@@ -46,10 +46,9 @@ function App() {
           </Box>
 
           <Text c={"dimmed"} mt={"xs"} lh={"xs"}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            A small utility to help calibrate the color of ambient light setups.
+            Uses the webcam to measure the difference between the displayed
+            color, and the color emitted by the ambient light.
           </Text>
 
           <Group mt={"md"}>
@@ -59,7 +58,8 @@ function App() {
               }
               component={"a"}
               color={"black"}
-              href={""}
+              href={"https://github.com/janus-pedersen/hyper-calibrator"}
+              target={"_blank"}
             >
               Open Repo
             </Button>
@@ -67,7 +67,10 @@ function App() {
               rightSection={<ExternalLink size={16} />}
               component={"a"}
               variant={"subtle"}
-              href={""}
+              href={
+                "https://github.com/janus-pedersen/hyper-calibrator/blob/main/GUIDE.md"
+              }
+              target={"_blank"}
             >
               Read Guide
             </Button>

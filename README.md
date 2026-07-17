@@ -1,77 +1,23 @@
-# React + TypeScript + Vite
+# Hyper Calibrator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> [!WARNING]
+> This entire project / idea is still very much WIP, any feedback and ideas are welcome.
 
-Currently, two official plugins are available:
+A small utility to help calibrate the color of ambient light setups made wither
+[Hyperion.ng](https://github.com/hyperion-project/hyperion.ng), [HyperHDR](https://github.com/awawa-dev/HyperHDR) or similar ambient light utilities.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[Try it now!](https://janus-pedersen.github.io/hyper-calibrator/)
 
-## React Compiler
+![Screenshot of the application](./public/screenshot.png)
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## The idea
 
-Note: This will impact Vite dev & build performances.
+It works by overriding the emitted light and comparing it with the color displayed on the screen with the help of a webcam. By using an itterative algorithm, it then tries to minimize the difference between the two. Once an optimal solution has been found, it's stored as a color channel adjustment (currently only in a temporary way, see issue [#1](https://github.com/janus-pedersen/hyper-calibrator/issues/1)).
 
-## Expanding the ESLint configuration
+## Caveats
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The current solution uses a webcam video stream as a color measurement method. This means that it's practically impossible to reach _aboslute_ color accuracy, but since the goal is to make it match the color of the display, it only needs to optimize for _relative_ color accuracy. It still isn't a perfect solution and there are many downsides to this, such as automatic whitebalance and difference in perceived vs captured color and so on.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## How to use it
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+Please read the [guide](./GUIDE.md)
