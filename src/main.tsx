@@ -15,7 +15,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <MantineProvider>
       <HyperionProvider>
-        {location.pathname.startsWith("/hyper-calibrator/display") ? (
+        {location.href.endsWith(`${import.meta.env.BASE_URL}#/display`) ? (
           <DisplayPopup />
         ) : (
           <>

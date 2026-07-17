@@ -38,7 +38,7 @@ export function DisplaySection() {
         rightSection={<ExternalLink size={16} />}
         onClick={() => {
           const popup = window.open(
-            "/hyper-calibrator/display",
+            `${import.meta.env.BASE_URL}#/display`,
             "color-display",
             "width=800,height=600",
           );
