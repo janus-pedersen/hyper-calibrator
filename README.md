@@ -8,7 +8,13 @@ A small utility to help calibrate the color of ambient light setups made wither
 
 [Try it now!](https://janus-pedersen.github.io/hyper-calibrator/)
 
-![Screenshot of the application](./public/screenshot.png)
+<!-- ![Screenshot of the application](./public/screenshot.png) -->
+
+## Demo
+
+Below is a demo of the calibration process for a white color
+
+![Demo](./public/demo.webp)
 
 ## The idea
 
