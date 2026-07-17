@@ -84,9 +84,7 @@ export function CameraView() {
           value={displayRegion.rect}
           onChange={(value) => displayRegion.update(value)}
           label={
-            displayColor && (
-              <ColorBox label={"Display"} color={live ? displayColor : null} />
-            )
+            <ColorBox label={"Display"} color={live ? displayColor : null} />
           }
         />
         <RegionRect
@@ -94,9 +92,7 @@ export function CameraView() {
           value={ambientRegion.rect}
           onChange={(value) => ambientRegion.update(value)}
           label={
-            ambientColor && (
-              <ColorBox label={"Ambient"} color={live ? ambientColor : null} />
-            )
+            <ColorBox label={"Ambient"} color={live ? ambientColor : null} />
           }
         />
 
