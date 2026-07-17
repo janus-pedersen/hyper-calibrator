@@ -27,8 +27,7 @@ export default {
     await overrideAmbient({ r: 0, g: 0, b: 0, mode: "rgb" });
     await overrideDisplay({ r: 0, g: 0, b: 0, mode: "rgb" });
 
-    await wait(1000); // Wait for the display and ambient light to settle
-
+    await wait(2500); // Wait for the display and ambient light to settle
     const { ambient: baselineAmbient } = await sample();
 
     // Start with a darkened version of the target color for the ambient light, that way theres room to increase brightness of some channels if needed
@@ -36,7 +35,7 @@ export default {
     await overrideDisplay(target);
     await overrideAmbient(current);
 
-    await wait(1000); // Wait for the display and ambient light to settle
+    await wait(1500); // Wait for the display and ambient light to settle
     const { ambient, display } = await sample();
     const errors = [differenceOklab(display, ambient)];
     reportError(errors[0], 0);
@@ -49,7 +48,7 @@ export default {
       current = calculateNextAmbientColor(display, ambient, current, 0.5);
       await overrideAmbient(current);
 
-      await wait(1000);
+      await wait(1500);
       const { ambient: newAmbient, display: newDisplay } = await sample();
 
       const error = differenceOklab(newDisplay, newAmbient);
