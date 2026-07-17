@@ -14,4 +14,5 @@ export default defineConfig({
     }),
     babel({ presets: [reactCompilerPreset()] }),
   ],
+  base: "/hyper-calibrator/",
 });

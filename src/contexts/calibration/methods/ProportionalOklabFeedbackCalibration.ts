@@ -39,7 +39,6 @@ export default {
       const { ambient, display } = await sample();
       current = calculateNextAmbientColor(display, ambient, current, 0.5);
       await overrideAmbient(current);
-      console.log("Normalized ambient color:", ambient);
 
       await wait(1000);
       const { ambient: newAmbient, display: newDisplay } = await sample();
