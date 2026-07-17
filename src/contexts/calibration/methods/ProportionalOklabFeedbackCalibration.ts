@@ -45,7 +45,7 @@ export default {
       const ambient = measureBaseline
         ? subtractBaseline(rawAmbient, baselineAmbient)
         : rawAmbient;
-      current = calculateNextAmbientColor(display, ambient, current, 0.5);
+      current = calculateNextAmbientColor(display, ambient, current);
       await overrideAmbient(current);
 
       await wait(1500);

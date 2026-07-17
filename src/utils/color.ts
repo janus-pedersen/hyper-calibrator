@@ -36,11 +36,21 @@ export const COLORS = [
   },
 ] as const;
 
+export interface CalculateNextAmbientColorOptions {
+  learningRate: number;
+  lightnessWeight: number;
+  chromaWeight: number;
+}
+
 export function calculateNextAmbientColor(
   target: Rgb,
   measuredAmbient: Rgb,
   currentOutput: Rgb,
-  learningRate = 0.5,
+  options: CalculateNextAmbientColorOptions = {
+    learningRate: 0.25,
+    lightnessWeight: 0.2,
+    chromaWeight: 1,
+  },
 ): Rgb {
   const targetLab = toOklab(target);
   const measuredLab = toOklab(measuredAmbient);
@@ -64,12 +74,26 @@ export function calculateNextAmbientColor(
 
   const next: Oklab = {
     mode: "oklab",
-    l: Math.max(
-      0,
-      Math.min(1, outputLab.l + (targetLab.l - measuredLab.l) * learningRate),
-    ),
-    a: outputLab.a + (targetLab.a - measuredLab.a) * learningRate,
-    b: outputLab.b + (targetLab.b - measuredLab.b) * learningRate,
+
+    // Correct brightness more conservatively
+    l:
+      outputLab.l +
+      (targetLab.l - measuredLab.l) *
+        options.learningRate *
+        options.lightnessWeight,
+
+    // Correct color cast more aggressively
+    a:
+      outputLab.a +
+      (targetLab.a - measuredLab.a) *
+        options.learningRate *
+        options.chromaWeight,
+
+    b:
+      outputLab.b +
+      (targetLab.b - measuredLab.b) *
+        options.learningRate *
+        options.chromaWeight,
   };
 
   console.log("Next OKLab color:", next);
