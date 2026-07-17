@@ -7,6 +7,7 @@ export interface CalibrationContext {
     ambient: Rgb;
     display: Rgb;
   }>;
+  measureBaseline: boolean;
   overrideAmbient: (color: Rgb) => Promise<void>;
   overrideDisplay: (color: Rgb) => Promise<void>;
   /** Report the estimated progress */

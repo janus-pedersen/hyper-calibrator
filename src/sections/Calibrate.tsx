@@ -1,6 +1,6 @@
 import { Scale } from "lucide-react";
 import { Section } from "../components/Section";
-import { Button, Group, Select, Stack } from "@mantine/core";
+import { Button, Checkbox, Group, Select, Stack } from "@mantine/core";
 import { type Rgb } from "culori";
 import { useCalibration } from "../contexts/calibration/useCalibration";
 import { CALIBRATION_METHODS } from "../contexts/calibration/methods";
@@ -16,15 +16,13 @@ export function CalibrateSection() {
     ...COLORS,
   ]);
 
+  const [sampleMethod, setSampleMethod] =
+    useState<keyof typeof COLOR_SAMPLE_METHODS>("dominant");
+  const [measureBaseline, setMeasureBaseline] = useState(false);
+
   const { clearAmbientColor, setAdjustment } = useHyperion();
-  const {
-    calibrationMethod,
-    setCalibrationMethod,
-    sampleMethod,
-    setSampleMethod,
-    start,
-    clearErrors,
-  } = useCalibration();
+  const { calibrationMethod, setCalibrationMethod, start, clearErrors } =
+    useCalibration();
 
   return (
     <Section
@@ -82,6 +80,14 @@ export function CalibrateSection() {
             }
           />
         </Group>
+        <Checkbox
+          label={"Measure Baseline"}
+          description={
+            "Subtracts the wall color from the measured colors to improve accuracy."
+          }
+          checked={measureBaseline}
+          onChange={(e) => setMeasureBaseline(e.currentTarget.checked)}
+        />
 
         <Button.Group>
           <Button
@@ -98,7 +104,12 @@ export function CalibrateSection() {
                   color.value,
                 );
 
-                await start(color.value, color.name)
+                await start({
+                  target: color.value,
+                  targetKey: color.name,
+                  sampleMethod,
+                  measureBaseline,
+                })
                   .then((result) => {
                     console.log("Calibration completed with result:", result);
                     notifications.show({

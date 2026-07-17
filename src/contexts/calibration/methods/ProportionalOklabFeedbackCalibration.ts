@@ -1,7 +1,10 @@
 import { differenceEuclidean, filterBrightness } from "culori";
 import type { CalibrationMethod } from "../CalibrationMethod";
 import { variance } from "../../../utils/math";
-import { calculateNextAmbientColor } from "../../../utils/color";
+import {
+  calculateNextAmbientColor,
+  subtractBaseline,
+} from "../../../utils/color";
 import { Repeat } from "lucide-react";
 
 const differenceOklab = differenceEuclidean("oklab");
@@ -14,6 +17,7 @@ export default {
   icon: Repeat,
   start: async ({
     target,
+    measureBaseline,
     sample,
     overrideAmbient,
     overrideDisplay,
@@ -24,6 +28,8 @@ export default {
     await overrideDisplay({ r: 0, g: 0, b: 0, mode: "rgb" });
 
     await wait(1000); // Wait for the display and ambient light to settle
+
+    const { ambient: baselineAmbient } = await sample();
 
     // Start with a darkened version of the target color for the ambient light, that way theres room to increase brightness of some channels if needed
     let current = darken(target);
@@ -36,7 +42,10 @@ export default {
     reportError(errors[0], 0);
 
     do {
-      const { ambient, display } = await sample();
+      const { ambient: rawAmbient, display } = await sample();
+      const ambient = measureBaseline
+        ? subtractBaseline(rawAmbient, baselineAmbient)
+        : rawAmbient;
       current = calculateNextAmbientColor(display, ambient, current, 0.5);
       await overrideAmbient(current);
 

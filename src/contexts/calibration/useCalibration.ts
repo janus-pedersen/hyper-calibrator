@@ -5,11 +5,14 @@ import { useState } from "react";
 import { useHyperion } from "../hyperion";
 import { useVideoRegions } from "../video/useVideoRegions";
 
-export interface CalibrationContext {
-  // Color sampling
+export interface CalibrationStartOptions {
   sampleMethod: ColorSampleMethods;
-  setSampleMethod: (method: ColorSampleMethods) => void;
+  measureBaseline: boolean;
+  target: Rgb;
+  targetKey: string;
+}
 
+export interface CalibrationContext {
   // Calibration method
   calibrationMethod: keyof typeof CALIBRATION_METHODS;
   setCalibrationMethod: (method: keyof typeof CALIBRATION_METHODS) => void;
@@ -27,8 +30,6 @@ export const useCalibration = () => {
   const { setAmbientColor, setDisplayColor } = useHyperion();
   const { ambient, display } = useVideoRegions();
 
-  const [sampleMethod, setSampleMethod] =
-    useState<ColorSampleMethods>("dominant");
   const [calibrationMethod, setCalibrationMethod] = useState<
     keyof typeof CALIBRATION_METHODS
   >("proportionalOklabFeedbackCalibration");
@@ -41,11 +42,12 @@ export const useCalibration = () => {
 
   const method = CALIBRATION_METHODS[calibrationMethod];
 
-  const start = async (target: Rgb, key: string) => {
+  const start = async (options: CalibrationStartOptions) => {
     setProgress(0);
 
     return method.start({
-      target,
+      target: options.target,
+      measureBaseline: options.measureBaseline,
       overrideAmbient: setAmbientColor,
       overrideDisplay: setDisplayColor,
       reportProgress: (progress) => {
@@ -55,15 +57,15 @@ export const useCalibration = () => {
         setErrors((prev) => {
           const newErrors = [...prev];
           newErrors[iteration] = {
-            [key]: error,
+            [options.targetKey]: error,
             ...(prev.length >= iteration ? prev[iteration] : {}),
           };
           return newErrors;
         });
       },
       sample: async () => {
-        const ambientSample = ambient.sample()[sampleMethod];
-        const displaySample = display.sample()[sampleMethod];
+        const ambientSample = ambient.sample()[options.sampleMethod];
+        const displaySample = display.sample()[options.sampleMethod];
 
         return {
           ambient: ambientSample,
@@ -74,8 +76,6 @@ export const useCalibration = () => {
   };
 
   return {
-    sampleMethod,
-    setSampleMethod,
     calibrationMethod,
     setCalibrationMethod,
     errors,
